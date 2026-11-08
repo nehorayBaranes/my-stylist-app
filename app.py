@@ -23,13 +23,23 @@ else:
     # שימוש במודל החינמי המהיר שתומך בתמונות
     model = genai.GenerativeModel('gemini-1.5-flash')
 
-    # העלאת תמונה מהטלפון
-    uploaded_file = st.file_uploader("צניחי או בחרי תמונת בגדים:", type=["jpg", "jpeg", "png"])
+    # בחירה בין צילום במצלמה לבין העלאה מהגלריה
+    upload_option = st.radio("איך תרצי להוסיף את התמונה?", ("צלם תמונה במצלמה", "העלה תמונה מהגלריה/קבצים"))
 
-    if uploaded_file is not None:
-        image = Image.open(uploaded_file)
-        st.image(image, caption="הבגדים שנבחרו", use_column_width=True)
+    image = None
 
+    if upload_option == "צלם תמונה במצלמה":
+        camera_file = st.camera_input("צלמי את הבגדים עכשיו:")
+        if camera_file is not None:
+            image = Image.open(camera_file)
+    else:
+        uploaded_file = st.file_uploader("בחרי תמונת בגדים מהגלריה:", type=["jpg", "jpeg", "png"])
+        if uploaded_file is not None:
+            image = Image.open(uploaded_file)
+            st.image(image, caption="הבגדים שנבחרו", use_column_width=True)
+
+    # כפתור הניתוח יופיע רק ברגע שיש תמונה
+    if image is not None:
         if st.button("נתחי לי את ההופעה! ✨", type="primary"):
             with st.spinner("הסטייליסטית חושבת על שילוב מושלם..."):
                 
