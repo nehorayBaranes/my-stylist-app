@@ -10,11 +10,20 @@ st.set_page_config(
 )
 
 st.title("👕 הסטייליסטית האישית שלך")
-st.write("צצממי או העלי תמונה של הבגדים, וקבלו ייעוץ מהיר לבוקר יחד עם הסבר ללמידה בהמשך!")
+st.write("צלמי או העלי תמונה של הבגדים, וקבלו ייעוץ מהיר לבוקר יחד עם הסבר ללמידה בהמשך!")
 
-# שדה להזנת מפתח ה-API החינמי של Gemini
+# שדה להזנת מפתח ה-API החינמי של Gemini עם שמירה בזיכרון האתר
 st.sidebar.header("הגדרות")
-api_key = st.sidebar.text_input("הכנס מפתח Google Gemini API:", type="password")
+
+if "api_key" not in st.session_state:
+    st.session_state.api_key = ""
+
+api_key_input = st.sidebar.text_input("הכנס מפתח Google Gemini API:", type="password", value=st.session_state.api_key)
+
+if api_key_input:
+    st.session_state.api_key = api_key_input
+
+api_key = st.session_state.api_key
 
 if not api_key:
     st.warning("נא להזין מפתח API כדי להתחיל. (ניתן לקבל מפתח חינמי לגמרי מ-Google AI Studio).")
